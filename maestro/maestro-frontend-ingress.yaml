@@ -1,0 +1,16 @@
+---
+
+# Maestro frontend ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: maestro-frontend-ingress
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`maestro.yukitsune.dev`) # Wish this could be put into a ConfigMap 😔
+      kind: Rule
+      services:
+        - name: maestro-frontend
+          port: 80
