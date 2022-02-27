@@ -1,0 +1,17 @@
+---
+
+# ChartMuseum ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: chartmuseum-ingress
+  namespace: dev
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`charts.yukitsune.dev`)
+      kind: Rule
+      services:
+        - name: chartmuseum
+          port: 8080
