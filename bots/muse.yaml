@@ -1,0 +1,82 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: muse
+spec:
+  selector:
+    matchLabels:
+      app: muse
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: muse
+    spec:
+      containers:
+        - name: muse
+          image: codetheweb/muse:latest
+
+          volumeMounts:
+            - name: muse-vol
+              mountPath: /data
+
+          env:
+            - name: DISCORD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: muse-secret
+                  key: discord-token
+
+            - name: YOUTUBE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: muse-secret
+                  key: youtube-api-key
+
+            - name: SPOTIFY_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: muse-secret
+                  key: spotify-client-id
+
+            - name: SPOTIFY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: muse-secret
+                  key: spotify-client-secret
+
+      volumes:
+        - name: muse-vol
+          persistentVolumeClaim:
+            claimName: muse-pvc
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: muse-pv
+spec:
+  storageClassName: do-block-storage
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/muse/"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: muse-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: do-block-storage
