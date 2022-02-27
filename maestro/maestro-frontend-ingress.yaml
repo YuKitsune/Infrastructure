@@ -5,6 +5,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: maestro-frontend-ingress
+  namespace: maestro
 spec:
   entryPoints:
     - websecure
@@ -12,5 +13,5 @@ spec:
     - match: Host(`maestro.yukitsune.dev`) # Wish this could be put into a ConfigMap 😔
       kind: Rule
       services:
-        - name: maestro-frontend
+        - name: maestro-frontend-service
           port: 80
