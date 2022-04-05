@@ -1,0 +1,54 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog
+spec:
+  selector:
+    matchLabels:
+      app: blog
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: blog
+    spec:
+
+      containers:
+        - name: blog
+          image: ghcr.io/yukitsune/yukitsune-dev:v1.0.11
+          ports:
+            - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-service
+spec:
+  type: ClusterIP
+  selector:
+    app: blog
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: blog-ingress
+  namespace: blog
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`yukitsune.dev`)
+      kind: Rule
+      services:
+        - name: blog-service
+          port: 80
