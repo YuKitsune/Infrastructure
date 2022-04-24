@@ -15,7 +15,6 @@ spec:
       labels:
         app: muse
     spec:
-      nodeName: maestro-k8s-prod-pool-cf4sr # Restricting to a specific node, testing to see if it fixes the "couldn't find config" error
       containers:
         - name: muse
           image: ghcr.io/yukitsune/muse:d54798f451b6d502100388f3c1a95af6182341d1
