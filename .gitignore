@@ -1,2 +1,6 @@
+# Secrets
 *.secret.yaml
+
+# Certificates
 *.crt
+*.p8
