@@ -1,0 +1,11 @@
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: admin-auth
+  namespace: traefik
+spec:
+  basicAuth:
+    secret: admin-auth
+    removeHeader: true

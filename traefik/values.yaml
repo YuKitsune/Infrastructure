@@ -56,3 +56,7 @@ deployment:
 ingressClass:
   enabled: true
   isDefaultClass: true
+
+providers:
+  kubernetesCRD:
+    allowCrossNamespace: true
