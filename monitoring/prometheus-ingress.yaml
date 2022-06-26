@@ -1,0 +1,19 @@
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: prometheus-ingress
+  namespace: monitoring
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`prometheus.yukitsune.dev`)
+      kind: Rule
+      middlewares:
+        - name: admin-auth
+          namespace: traefik
+      services:
+        - name: prometheus-stack-kube-prom-prometheus
+          port: 9090
