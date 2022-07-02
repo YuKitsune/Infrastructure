@@ -23,7 +23,7 @@ prometheus:
         scheme: https
         metrics_path: '/api/metrics'
         static_configs:
-          - targets: ['maestro-api.maestro.svc.cluster.local']
+          - targets: ['maestro.yukitsune.dev']
     
     ## Prometheus StorageSpec for persistent data
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/storage.md
