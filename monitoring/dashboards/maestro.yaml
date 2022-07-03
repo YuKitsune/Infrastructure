@@ -6,16 +6,6 @@ metadata:
 data:
   maestro.json: |-
     {
-      "__inputs": [
-        {
-          "name": "DS_PROMETHEUS",
-          "label": "Prometheus",
-          "description": "",
-          "type": "datasource",
-          "pluginId": "prometheus",
-          "pluginName": "Prometheus"
-        }
-      ],
       "annotations": {
         "list": [
           {
@@ -41,7 +31,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": 28,
+      "id": 1,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -114,7 +104,7 @@ data:
           },
           "gridPos": {
             "h": 8,
-            "w": 5,
+            "w": 6,
             "x": 0,
             "y": 1
           },
@@ -137,11 +127,11 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "increase(maestro_request_count{}[1m])",
+              "expr": "sum(increase(maestro_request_duration_seconds_count{}[$__rate_interval]))",
               "refId": "A"
             }
           ],
-          "title": "Requests per Minute",
+          "title": "Request count",
           "type": "timeseries"
         },
         {
@@ -202,8 +192,8 @@ data:
           },
           "gridPos": {
             "h": 8,
-            "w": 5,
-            "x": 5,
+            "w": 12,
+            "x": 6,
             "y": 1
           },
           "id": 14,
@@ -226,25 +216,13 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "rate(maestro_request_duration_sum[$__rate_interval]) / rate(maestro_request_duration_count[$__rate_interval])",
-              "legendFormat": "Average",
+              "expr": "increase(maestro_request_duration_seconds_sum[$__rate_interval]) / increase(maestro_request_duration_seconds_count[$__rate_interval])",
+              "legendFormat": "{{route}}",
               "range": true,
               "refId": "Average"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prometheus"
-              },
-              "editorMode": "code",
-              "expr": "histogram_quantile(0.95, sum(rate(maestro_request_duration_bucket[$__rate_interval])) by (le))",
-              "hide": false,
-              "legendFormat": "95th Percentile",
-              "range": true,
-              "refId": "B"
             }
           ],
-          "title": "Latency",
+          "title": "Average latency",
           "type": "timeseries"
         },
         {
@@ -338,8 +316,8 @@ data:
           },
           "gridPos": {
             "h": 8,
-            "w": 4,
-            "x": 10,
+            "w": 6,
+            "x": 18,
             "y": 1
           },
           "id": 4,
@@ -362,114 +340,52 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "increase(maestro_server_error_count{}[1m])",
+              "expr": "increase(maestro_server_error_count{}[$__rate_interval])",
               "hide": false,
               "instant": false,
               "legendFormat": "Server Errors (5xx)",
               "range": true,
               "refId": "Server Errors"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prometheus"
-              },
-              "editorMode": "code",
-              "expr": "increase(maestro_client_error_count{}[1m])",
-              "hide": false,
-              "legendFormat": "Client Errors (4xx)",
-              "range": true,
-              "refId": "Client Errors"
             }
           ],
-          "title": "Error Rate",
+          "title": "Errors",
           "type": "timeseries"
         },
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              }
-            },
-            "overrides": []
+            "type": "loki",
+            "uid": "loki"
           },
           "gridPos": {
             "h": 8,
-            "w": 5,
-            "x": 14,
-            "y": 1
+            "w": 12,
+            "x": 0,
+            "y": 9
           },
-          "id": 20,
+          "id": 22,
           "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+            "dedupStrategy": "none",
+            "enableLogDetails": true,
+            "prettifyLogMessage": false,
+            "showCommonLabels": false,
+            "showLabels": false,
+            "showTime": false,
+            "sortOrder": "Descending",
+            "wrapLogMessage": false
           },
           "targets": [
             {
               "datasource": {
-                "type": "prometheus",
-                "uid": "prometheus"
+                "type": "loki",
+                "uid": "loki"
               },
-              "expr": "increase(maestro_db_call_count[1m])",
+              "expr": "{app=\"maestro\"}",
+              "queryType": "range",
               "refId": "A"
             }
           ],
-          "title": "Database Calls per Minute",
-          "type": "timeseries"
+          "title": "Logs",
+          "type": "logs"
         },
         {
           "datasource": {
@@ -570,9 +486,9 @@ data:
           },
           "gridPos": {
             "h": 8,
-            "w": 5,
-            "x": 19,
-            "y": 1
+            "w": 6,
+            "x": 12,
+            "y": 9
           },
           "id": 16,
           "options": {
@@ -593,7 +509,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "increase(maestro_apple_music_request_count{job=\"maestro\"}[1m])",
+              "expr": "increase(maestro_apple_music_request_count{job=\"maestro\"}[$__rate_interval])",
               "legendFormat": "Apple Music",
               "range": true,
               "refId": "Apple Music"
@@ -604,7 +520,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "increase(maestro_spotify_request_count{job=\"maestro\"}[1m])",
+              "expr": "increase(maestro_spotify_request_count{job=\"maestro\"}[$__rate_interval])",
               "hide": false,
               "legendFormat": "Spotify",
               "range": true,
@@ -617,7 +533,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "increase(maestro_deezer_request_count{job=\"maestro\"}[1m])",
+              "expr": "increase(maestro_deezer_request_count{job=\"maestro\"}[$__rate_interval])",
               "format": "time_series",
               "hide": false,
               "instant": false,
@@ -626,7 +542,93 @@ data:
               "refId": "Deezer"
             }
           ],
-          "title": "External API requests per minute",
+          "title": "External API requests",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 18,
+            "y": 9
+          },
+          "id": 20,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "expr": "increase(maestro_db_call_count[$__rate_interval])",
+              "refId": "A"
+            }
+          ],
+          "title": "Database calls",
           "type": "timeseries"
         },
         {
@@ -634,7 +636,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 9
+            "y": 17
           },
           "id": 10,
           "title": "Process",
@@ -700,7 +702,7 @@ data:
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 10
+            "y": 18
           },
           "id": 18,
           "options": {
@@ -724,7 +726,7 @@ data:
               "refId": "A"
             }
           ],
-          "title": "Memory Usage",
+          "title": "Memory usage",
           "type": "timeseries"
         },
         {
@@ -790,7 +792,7 @@ data:
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 10
+            "y": 18
           },
           "id": 8,
           "options": {
@@ -806,15 +808,19 @@ data:
           },
           "targets": [
             {
-              "datasource": "${DS_PROMETHEUS}",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "expr": "go_goroutines{job=\"maestro\"}",
               "refId": "A"
             }
           ],
-          "title": "Total Goroutines",
+          "title": "Total goroutines",
           "type": "timeseries"
         }
       ],
+      "refresh": false,
       "schemaVersion": 36,
       "style": "dark",
       "tags": [],
@@ -829,6 +835,6 @@ data:
       "timezone": "",
       "title": "Maestro",
       "uid": "YSRCojCnk",
-      "version": 5,
+      "version": 3,
       "weekStart": ""
     }
