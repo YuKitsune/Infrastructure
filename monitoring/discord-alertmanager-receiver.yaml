@@ -25,6 +25,14 @@ spec:
                 secretKeyRef:
                   name: discord-secret
                   key: webhook-url
+
+          resources:
+            requests:
+              cpu: "1m"
+              memory: "10M"
+            limits:
+              cpu: "5m"
+              memory: "15M"
 ---
 
 apiVersion: v1

@@ -47,6 +47,14 @@ spec:
                 secretKeyRef:
                   name: muse-secret
                   key: spotify-client-secret
+          
+          resources:
+            requests:
+              cpu: "150m"
+              memory: "300M"
+            limits:
+              cpu: "1.0"
+              memory: "350M"
 
       volumes:
         - name: muse-vol

@@ -2,6 +2,13 @@ alertmanager:
   alertmanagerSpec:
     alertmanagerConfiguration:
       name: alertmanager-config
+    resources:
+      requests:
+        cpu: 5m
+        memory: 25M
+      limits:
+        cpu: 15m
+        memory: 30M
 
 prometheus:
   prometheusSpec:

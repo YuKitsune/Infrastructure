@@ -60,3 +60,11 @@ ingressClass:
 providers:
   kubernetesCRD:
     allowCrossNamespace: true
+
+resources:
+  requests:
+    cpu: "10m"
+    memory: "40M"
+  limits:
+    cpu: "50m"
+    memory: "50M"

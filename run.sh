@@ -14,7 +14,7 @@ kubectl apply -f ./blog/blog.yaml --namespace blog
 ## ChartMuseum
 kubectl apply -f ./dev/namespace.yaml
 helm repo add chartmuseum https://chartmuseum.github.io/charts
-helm upgrade --install chartmuseum chartmuseum/chartmuseum --values ./secrets/chartmuseum.values.secrets.yaml --namespace dev
+helm upgrade --install chartmuseum chartmuseum/chartmuseum --values ./dev/secrets/chartmuseum.values.secret.yaml --namespace dev
 kubectl apply -f ./dev/chartmuseum-ingress.yaml --namespace dev
 
 # Setup Maestro
@@ -46,5 +46,5 @@ helm upgrade --install grafana grafana/grafana -f ./monitoring/secrets/grafana-v
 kubectl apply -f ./monitoring/dashboards/maestro.yaml
 kubectl apply -f ./monitoring/grafana-ingress.yaml
 
-## Todo: Loki
-helm upgrade --install loki grafana/loki --namespace monitoring
+## Loki
+helm upgrade --install loki grafana/loki -f ./monitoring/loki-values.yaml --namespace monitoring

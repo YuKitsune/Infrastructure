@@ -24,6 +24,13 @@ spec:
           env:
             - name: BASE_URL
               value: https://yukitsune.dev/
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "25M"
+            limits:
+              cpu: "500m"
+              memory: "250M"
 
 ---
 
