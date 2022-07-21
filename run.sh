@@ -36,10 +36,7 @@ kubectl apply -f ./monitoring/namespace.yaml
 
 ## Prometheus Stack (incl. AlertManager)
 helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack -f ./monitoring/prometheus-values.yaml --namespace monitoring
-kubectl apply -f ./monitoring/secrets/discord.secret.yaml
-kubectl apply -f ./monitoring/alertmanager-config.yaml
 kubectl apply -f ./monitoring/prometheus-ingress.yaml
-kubectl apply -f ./monitoring/alertmanager-ingress.yaml
 
 ## Grafana
 helm upgrade --install grafana grafana/grafana -f ./monitoring/secrets/grafana-values.secret.yaml --namespace monitoring
