@@ -1,14 +1,6 @@
+# Disable Alert Manager, config is borked
 alertmanager:
-  alertmanagerSpec:
-    alertmanagerConfiguration:
-      name: alertmanager-config
-    resources:
-      requests:
-        cpu: 5m
-        memory: 25M
-      limits:
-        cpu: 15m
-        memory: 30M
+  enabled: false
 
 prometheus:
   prometheusSpec:
