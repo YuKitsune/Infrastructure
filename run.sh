@@ -19,7 +19,7 @@ kubectl apply -f ./dev/chartmuseum-ingress.yaml --namespace dev
 
 # Setup Maestro
 kubectl apply -f ./maestro/namespace.yaml
-helm repo add chartmuseum https://charts.yukitsune.dev
+helm repo add yukitsune https://charts.yukitsune.dev
 helm upgrade --install maestro yukitsune/maestro -f ./maestro/secrets/values.secret.yaml --namespace maestro
 kubectl apply -f ./maestro/maestro-api-ingress.yaml 
 kubectl apply -f ./maestro/maestro-frontend-ingress.yaml
@@ -34,7 +34,8 @@ kubectl apply -f ./bots/muse.yaml
 # Setup Monitoring
 kubectl apply -f ./monitoring/namespace.yaml
 
-## Prometheus Stack (incl. AlertManager)
+## Prometheus Stack
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack -f ./monitoring/prometheus-values.yaml --namespace monitoring
 kubectl apply -f ./monitoring/prometheus-ingress.yaml
 
