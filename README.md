@@ -12,4 +12,4 @@
 </h3>
 
 # Diagram
-![Diagram](./Overview.png)
+![Diagram](./overview.png)
