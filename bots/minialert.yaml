@@ -1,0 +1,101 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minialert
+  namespace: bots
+spec:
+  selector:
+    matchLabels:
+      app: minialert
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: minialert
+    spec:
+      containers:
+        - name: minialert
+          image: ghcr.io/yukitsune/minialert:v0.1.1
+      
+          volumeMounts:
+            - name: mongo-tls
+              mountPath: "/etc/minialert/mongo"
+              readOnly: true
+
+          env:
+            - name: MINIALERT_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: minialert-secret
+                  key: discord-bot-token
+
+            - name: MINIALERT_BOT_CLIENTID
+              valueFrom:
+                secretKeyRef:
+                  name: minialert-secret
+                  key: discord-bot-clientid
+
+            - name: MINIALERT_BOT_PERMISSIONS
+              valueFrom:
+                secretKeyRef:
+                  name: minialert-secret
+                  key: discord-bot-permissions
+
+            - name: MINIALERT_DATABASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: minialert-secret
+                  key: mongo-uri
+
+            - name: MINIALERT_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: minialert-secret
+                  key: mongo-database-name
+          
+          resources:
+            requests:
+              cpu: "150m"
+              memory: "300M"
+            limits:
+              cpu: "1.0"
+              memory: "350M"
+
+      # MongoDB TLS file
+      volumes:
+        - name: mongo-tls
+          secret:
+            secretName: minialert-secret-mongo-tls
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: muse-pv
+  namespace: bots
+spec:
+  storageClassName: do-block-storage
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/muse/"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: muse-pvc
+  namespace: bots
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: do-block-storage
