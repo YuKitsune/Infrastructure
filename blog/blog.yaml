@@ -18,7 +18,7 @@ spec:
 
       containers:
         - name: blog
-          image: ghcr.io/yukitsune/yukitsune-dev:v2.0.2
+          image: ghcr.io/yukitsune/yukitsune-dev:v2.0.3
           ports:
             - containerPort: 80
           env:
