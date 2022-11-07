@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: muse
-          image: ghcr.io/yukitsune/muse:d54798f451b6d502100388f3c1a95af6182341d1
+          image: ghcr.io/yukitsune/muse:e05c2dd164be627a13080b1eb82b14a73ded88a3
 
           volumeMounts:
             - name: muse-vol
