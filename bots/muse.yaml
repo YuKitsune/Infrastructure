@@ -54,7 +54,7 @@ spec:
               memory: "300M"
             limits:
               cpu: "1.0"
-              memory: "350M"
+              memory: "500M" # Todo: Revise
 
       volumes:
         - name: muse-vol
